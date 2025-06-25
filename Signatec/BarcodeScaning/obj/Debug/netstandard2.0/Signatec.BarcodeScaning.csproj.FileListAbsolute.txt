@@ -1,0 +1,13 @@
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.csproj.AssemblyReference.cache
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.AssemblyInfoInputs.cache
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.AssemblyInfo.cs
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.csproj.CoreCompileInputs.cache
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\bin\Debug\netstandard2.0\Signatec.BarcodeScaning.deps.json
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\bin\Debug\netstandard2.0\Signatec.BarcodeScaning.dll
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\bin\Debug\netstandard2.0\Signatec.BarcodeScaning.pdb
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\bin\Debug\netstandard2.0\ThoughtWorks.QRCode.dll
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\bin\Debug\netstandard2.0\ThoughtWorks.QRCode.pdb
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.0486E900.Up2Date
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.dll
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.pdb

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ThoughtWorks.QRCode</id>
+    <version>1.0.0</version>
+    <authors>ThoughtWorks.QRCode</authors>
+    <description>Package Description</description>
+    <repository type="git" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="SixLabors.ImageSharp" version="1.0.4" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\bin\Debug\netstandard2.0\ThoughtWorks.QRCode.dll" target="lib\netstandard2.0\ThoughtWorks.QRCode.dll" />
+  </files>
+</package>

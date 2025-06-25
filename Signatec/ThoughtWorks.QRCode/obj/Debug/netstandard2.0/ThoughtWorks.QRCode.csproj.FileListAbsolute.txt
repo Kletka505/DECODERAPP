@@ -1,0 +1,12 @@
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\bin\Debug\netstandard2.0\ThoughtWorks.QRCode.deps.json
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\bin\Debug\netstandard2.0\ThoughtWorks.QRCode.dll
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\bin\Debug\netstandard2.0\ThoughtWorks.QRCode.pdb
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\obj\Debug\netstandard2.0\ThoughtWorks.QRCode.csproj.AssemblyReference.cache
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\obj\Debug\netstandard2.0\ThoughtWorks.QRCode.Properties.Resources.resources
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\obj\Debug\netstandard2.0\ThoughtWorks.QRCode.csproj.GenerateResource.cache
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\obj\Debug\netstandard2.0\ThoughtWorks.QRCode.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\obj\Debug\netstandard2.0\ThoughtWorks.QRCode.AssemblyInfoInputs.cache
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\obj\Debug\netstandard2.0\ThoughtWorks.QRCode.AssemblyInfo.cs
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\obj\Debug\netstandard2.0\ThoughtWorks.QRCode.csproj.CoreCompileInputs.cache
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\obj\Debug\netstandard2.0\ThoughtWorks.QRCode.dll
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\ThoughtWorks.QRCode\obj\Debug\netstandard2.0\ThoughtWorks.QRCode.pdb

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework> <!-- Можно net8.0 -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Signatec\BarcodeScaning\Signatec.BarcodeScaning.csproj" />
+  </ItemGroup>
+
+</Project>
