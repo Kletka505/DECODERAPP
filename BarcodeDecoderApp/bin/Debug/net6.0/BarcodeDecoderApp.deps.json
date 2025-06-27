@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v6.0": {
       "BarcodeDecoderApp/1.0.0": {
         "dependencies": {
-          "Signatec.BarcodeScaning": "1.0.0"
+          "Signatec.BarcodeScaning": "1.0.0",
+          "Spectre.Console": "0.50.0"
         },
         "runtime": {
           "BarcodeDecoderApp.dll": {}
@@ -73,6 +74,17 @@
           }
         }
       },
+      "Spectre.Console/0.50.0": {
+        "dependencies": {
+          "System.Memory": "4.6.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Spectre.Console.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.50.0.0"
+          }
+        }
+      },
       "System.IO.Ports/4.7.0": {
         "dependencies": {
           "Microsoft.Win32.Registry": "4.7.0",
@@ -105,6 +117,7 @@
           }
         }
       },
+      "System.Memory/4.6.3": {},
       "System.Security.AccessControl/4.7.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "3.1.0",
@@ -199,12 +212,26 @@
       "path": "sixlabors.imagesharp/1.0.4",
       "hashPath": "sixlabors.imagesharp.1.0.4.nupkg.sha512"
     },
+    "Spectre.Console/0.50.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gkwYncFqMjlPF6Yz8KeVsKWpdfv15sr6uKm+vXVa/8Q4tvx52LPzMQOO5m+bXwI3AGGFeY3cok3ZJbguYizswg==",
+      "path": "spectre.console/0.50.0",
+      "hashPath": "spectre.console.0.50.0.nupkg.sha512"
+    },
     "System.IO.Ports/4.7.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-tNHiZcdskfRpxU7LBBlA69YYgBqWMBE/JDdmrEIDa4iw944VK1u4+B0FeSls1FUm+Pm4X/Fl0fSGqi8MDhb8/Q==",
       "path": "system.io.ports/4.7.0",
       "hashPath": "system.io.ports.4.7.0.nupkg.sha512"
+    },
+    "System.Memory/4.6.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qdcDOgnFZY40+Q9876JUHnlHu7bosOHX8XISRoH94fwk6hgaeQGSgfZd8srWRZNt5bV9ZW2TljcegDNxsf+96A==",
+      "path": "system.memory/4.6.3",
+      "hashPath": "system.memory.4.6.3.nupkg.sha512"
     },
     "System.Security.AccessControl/4.7.0": {
       "type": "package",

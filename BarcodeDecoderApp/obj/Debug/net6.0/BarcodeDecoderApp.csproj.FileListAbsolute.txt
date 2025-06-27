@@ -27,3 +27,5 @@ C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Barc
 C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\BarcodeDecoderApp\obj\Debug\net6.0\BarcodeDecoderApp.pdb
 C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\BarcodeDecoderApp\obj\Debug\net6.0\BarcodeDecoderApp.genruntimeconfig.cache
 C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\BarcodeDecoderApp\obj\Debug\net6.0\ref\BarcodeDecoderApp.dll
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\BarcodeDecoderApp\obj\Debug\net6.0\BarcodeDecoderApp.sourcelink.json
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\BarcodeDecoderApp\bin\Debug\net6.0\Spectre.Console.dll
