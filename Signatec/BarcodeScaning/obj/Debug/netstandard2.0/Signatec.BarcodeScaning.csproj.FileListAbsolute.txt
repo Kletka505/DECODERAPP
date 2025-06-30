@@ -11,3 +11,4 @@ C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Sign
 C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.0486E900.Up2Date
 C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.dll
 C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.pdb
+C:\Users\iljab\OneDrive\Рабочий стол\Практика\DecoderApp\Signatec\BarcodeScaning\obj\Debug\netstandard2.0\Signatec.BarcodeScaning.sourcelink.json

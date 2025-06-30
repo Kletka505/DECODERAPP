@@ -7,10 +7,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Signatec\BarcodeScaning\Signatec.BarcodeScaning.csproj" />
+    <PackageReference Include="Spectre.Console" Version="0.50.0" />
+    <PackageReference Include="System.Management" Version="7.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-  <PackageReference Include="Spectre.Console" Version="0.50.0" />
-</ItemGroup>
+  
 
 </Project>

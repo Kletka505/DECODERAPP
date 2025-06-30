@@ -12,9 +12,9 @@ namespace BarcodeDecoderApp
     internal class Program
     {
         static string? selectedPort = null;
-        static string? lastDumpFile = null;
         static Barcode? lastBarcodeResult = null;
-        static bool lastActionWasDump = false; // чтобы понять откуда повторить
+        static SerialPort? serialPort = null;
+        private static readonly object consoleLock = new object();
 
         static void Main(string[] args)
         {
@@ -25,15 +25,15 @@ namespace BarcodeDecoderApp
                 var choice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .Title("Выберите действие:")
-                        .AddChoices(new[] { "Выбрать порт сканера", "Загрузить дамп", "Выход" }));
+                        .AddChoices(new[] { "Выбрать COM порт сканера", "Загрузить дамп", "Выход" }));
 
                 if (choice == "Выход")
                     break;
 
                 switch (choice)
                 {
-                    case "Выбрать порт сканера":
-                        SelectPortMenu();
+                    case "Выбрать COM порт сканера":
+                        SelectComPortMenu();
                         break;
                     case "Загрузить дамп":
                         LoadDumpMenu();
@@ -42,7 +42,6 @@ namespace BarcodeDecoderApp
             }
         }
 
-        // Метод для удаления кавычек в начале и конце строки
         static string CleanInput(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
@@ -57,36 +56,98 @@ namespace BarcodeDecoderApp
             return input;
         }
 
-        static void SelectPortMenu()
+        static void SelectComPortMenu()
         {
             var ports = SerialPort.GetPortNames().OrderBy(p => p).ToList();
-            ports.Add("[[Ввести вручную]]");
             ports.Add("[[Отмена]]");
+
+            if (ports.Count == 1) 
+            {
+                AnsiConsole.MarkupLine("[red]COM-порты не найдены![/]");
+                AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
+                return;
+            }
 
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("Выберите порт сканера:")
+                    .Title("Выберите COM порт сканера:")
                     .AddChoices(ports));
 
             if (choice == "[[Отмена]]")
                 return;
 
-            if (choice == "[[Ввести вручную]]")
+            selectedPort = choice;
+            RunScannerMode();
+        }
+
+        static void RunScannerMode()
+        {
+            if (selectedPort == null)
+                return;
+
+            try
             {
-                var manualPortRaw = AnsiConsole.Ask<string>("Введите имя порта:");
-                var manualPort = CleanInput(manualPortRaw);
-                if (!string.IsNullOrWhiteSpace(manualPort))
+                serialPort = new SerialPort(selectedPort, 9600, Parity.None, 8, StopBits.One)
                 {
-                    selectedPort = manualPort;
-                    lastActionWasDump = false;
-                    RunScannerMode();
-                }
+                    Encoding = Encoding.ASCII,
+                    ReadTimeout = 5000,
+                    NewLine = "\r\n"
+                };
+
+                serialPort.DataReceived += SerialPort_DataReceived;
+                serialPort.Open();
+
+                AnsiConsole.MarkupLine($"[green]Порт {selectedPort} открыт. Ожидание сканирования...[/]");
+                AnsiConsole.MarkupLine("[grey]Нажмите Enter для выхода из режима сканера.[/]");
+
+                Console.ReadLine();
+
+                serialPort.DataReceived -= SerialPort_DataReceived;
+                serialPort.Close();
+                serialPort.Dispose();
+                serialPort = null;
             }
-            else
+            catch (Exception ex)
             {
-                selectedPort = choice;
-                lastActionWasDump = false;
-                RunScannerMode();
+                AnsiConsole.MarkupLine($"[red]Ошибка при открытии порта: {ex.Message}[/]");
+                AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
+            }
+        }
+
+        private static void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                if (serialPort == null)
+                    return;
+
+                string data = serialPort.ReadLine(); 
+                data = data.Trim();
+
+                if (string.IsNullOrEmpty(data))
+                    return;
+
+                lock (consoleLock)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"Получен штрихкод: {data}");
+                    Console.ResetColor();
+                }
+
+              
+            }
+            catch (TimeoutException)
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                lock (consoleLock)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Ошибка чтения с порта: {ex.Message}");
+                    Console.ResetColor();
+                }
             }
         }
 
@@ -105,56 +166,29 @@ namespace BarcodeDecoderApp
                 return;
             }
 
-            lastDumpFile = path;
             lastBarcodeResult = DecodeFromFile(path);
-            lastActionWasDump = true;
             ShowBarcodeResultMenu();
         }
 
-        static void RunScannerMode()
+        static Barcode? DecodeFromFile(string path)
         {
-            while (true)
+            try
             {
-                AnsiConsole.Clear();
-                AnsiConsole.MarkupLine($"Порт сканера: [green]{selectedPort}[/]");
-                AnsiConsole.MarkupLine("[grey]Считайте штрихкод (введите путь к файлу или 'cancel' для отмены):[/]");
+                byte[] data = File.ReadAllBytes(path);
+                var barBuffer = new BarBuffer(data.ToList());
+                var inputBuffer = barBuffer.GetPureBuffer();
 
-                var inputRaw = Console.ReadLine();
-                if (inputRaw == null)
-                    return;
+                var res = HiginaCompressor.TryDecompress(inputBuffer);
+                if (res == null)
+                    res = TaskCompressor.DeCompress(inputBuffer);
 
-                var input = CleanInput(inputRaw);
-
-                if (input.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                    return;
-
-                if (!File.Exists(input))
-                {
-                    AnsiConsole.MarkupLine("[red]Файл не найден. Попробуйте снова.[/]");
-                    AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
-                    continue;
-                }
-
-                try
-                {
-                    var bytes = File.ReadAllBytes(input);
-                    var barBuffer = new BarBuffer(bytes.ToList());
-                    var inputBuffer = barBuffer.GetPureBuffer();
-
-                    var res = HiginaCompressor.TryDecompress(inputBuffer);
-                    if (res == null)
-                        res = TaskCompressor.DeCompress(inputBuffer);
-
-                    lastBarcodeResult = res;
-                    lastActionWasDump = false;
-                    ShowBarcodeResultMenu();
-                    return; // после показа результата вернемся в главное меню
-                }
-                catch (Exception ex)
-                {
-                    AnsiConsole.MarkupLine($"[red]Ошибка: {ex.Message}[/]");
-                    AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
-                }
+                return res;
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine($"[red]Ошибка при декодировании: {ex.Message}[/]");
+                AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
+                return null;
             }
         }
 
@@ -189,9 +223,7 @@ namespace BarcodeDecoderApp
                     AnsiConsole.Write(table);
                 }
 
-                var choices = new List<string> { "Повторить", "Сохранить дамп", "Отмена" };
-                if (lastBarcodeResult != null)
-                    choices.Insert(1, "Сохранить результат");
+                var choices = new List<string> { "Повторить", "Отмена" };
 
                 var action = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
@@ -201,126 +233,12 @@ namespace BarcodeDecoderApp
                 switch (action)
                 {
                     case "Повторить":
-                        if (lastActionWasDump)
-                        {
-                            // Запрос нового пути и декодирование дампа, оставаясь в этом меню
-                            ReloadDump();
-                        }
-                        else if (!lastActionWasDump && selectedPort != null)
-                        {
-                            RunScannerMode();
-                            return; // выход после работы сканера
-                        }
-                        break;
-
-                    case "Сохранить результат":
-                        SaveResultToFile();
-                        break;
-
-                    case "Сохранить дамп":
-                        SaveDumpToFile();
-                        break;
-
+                        return; 
                     case "Отмена":
                         lastBarcodeResult = null;
-                        lastDumpFile = null;
                         return;
                 }
             }
-        }
-
-        static void ReloadDump()
-        {
-            var pathRaw = AnsiConsole.Ask<string>("Укажите путь к файлу дампа (.dat) или введите [[Отмена]]:");
-            var path = CleanInput(pathRaw);
-
-            if (path.Equals("[[Отмена]]", StringComparison.OrdinalIgnoreCase))
-                return;
-
-            if (!File.Exists(path))
-            {
-                AnsiConsole.MarkupLine("[red]Файл не найден![/]");
-                AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
-                return;
-            }
-
-            lastDumpFile = path;
-            lastBarcodeResult = DecodeFromFile(path);
-        }
-
-        static Barcode? DecodeFromFile(string path)
-        {
-            try
-            {
-                byte[] data = File.ReadAllBytes(path);
-                var barBuffer = new BarBuffer(data.ToList());
-                var inputBuffer = barBuffer.GetPureBuffer();
-
-                var res = HiginaCompressor.TryDecompress(inputBuffer);
-                if (res == null)
-                    res = TaskCompressor.DeCompress(inputBuffer);
-
-                return res;
-            }
-            catch (Exception ex)
-            {
-                AnsiConsole.MarkupLine($"[red]Ошибка при декодировании: {ex.Message}[/]");
-                AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
-                return null;
-            }
-        }
-
-        static void SaveResultToFile()
-        {
-            var pathRaw = AnsiConsole.Ask<string>("Введите путь для сохранения результата (.txt):");
-            var path = CleanInput(pathRaw);
-
-            try
-            {
-                using var writer = new StreamWriter(path);
-                writer.WriteLine($"Формат: {lastBarcodeResult!.SourceType}");
-                writer.WriteLine($"Количество полей: {lastBarcodeResult.Fields?.Length ?? 0}");
-                writer.WriteLine();
-
-                if (lastBarcodeResult.Fields != null)
-                {
-                    foreach (var field in lastBarcodeResult.Fields)
-                    {
-                        writer.WriteLine($"{field.Name}: {field.Value}");
-                    }
-                }
-
-                AnsiConsole.MarkupLine("[green]Результат сохранён успешно[/]");
-            }
-            catch (Exception ex)
-            {
-                AnsiConsole.MarkupLine($"[red]Ошибка сохранения: {ex.Message}[/]");
-            }
-            AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
-        }
-
-        static void SaveDumpToFile()
-        {
-            if (lastDumpFile == null)
-            {
-                AnsiConsole.MarkupLine("[red]Дамп отсутствует для сохранения[/]");
-                AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
-                return;
-            }
-
-            var pathRaw = AnsiConsole.Ask<string>("Введите путь для сохранения дампа (.dat):");
-            var path = CleanInput(pathRaw);
-
-            try
-            {
-                File.Copy(lastDumpFile, path, true);
-                AnsiConsole.MarkupLine("[green]Дамп сохранён успешно[/]");
-            }
-            catch (Exception ex)
-            {
-                AnsiConsole.MarkupLine($"[red]Ошибка сохранения дампа: {ex.Message}[/]");
-            }
-            AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
         }
     }
 }

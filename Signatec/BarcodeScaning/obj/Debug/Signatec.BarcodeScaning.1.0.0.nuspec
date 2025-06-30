@@ -5,7 +5,7 @@
     <version>1.0.0</version>
     <authors>Signatec.BarcodeScaning</authors>
     <description>Package Description</description>
-    <repository type="git" />
+    <repository type="git" commit="7662582df6cc5eab1516373023b54ca35e5b16d9" />
     <dependencies>
       <group targetFramework=".NETStandard2.0">
         <dependency id="ThoughtWorks.QRCode" version="1.0.0" exclude="Build,Analyzers" />
