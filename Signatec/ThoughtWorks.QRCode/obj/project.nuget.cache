@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "E85Arn0x1Ns=",
+  "dgSpecHash": "c0wK35EAx+U=",
   "success": true,
   "projectFilePath": "C:\\Users\\iljab\\OneDrive\\Рабочий стол\\Практика\\DecoderApp\\Signatec\\ThoughtWorks.QRCode\\ThoughtWorks.QRCode.csproj",
   "expectedPackageFiles": [
@@ -22,8 +22,7 @@
       "filePath": "C:\\Users\\iljab\\OneDrive\\Рабочий стол\\Практика\\DecoderApp\\Signatec\\ThoughtWorks.QRCode\\ThoughtWorks.QRCode.csproj",
       "libraryId": "SixLabors.ImageSharp",
       "targetGraphs": [
-        ".NETStandard,Version=v2.0",
-        ".NETStandard,Version=v2.0/win-x64"
+        ".NETStandard,Version=v2.0"
       ]
     },
     {
@@ -35,8 +34,7 @@
       "filePath": "C:\\Users\\iljab\\OneDrive\\Рабочий стол\\Практика\\DecoderApp\\Signatec\\ThoughtWorks.QRCode\\ThoughtWorks.QRCode.csproj",
       "libraryId": "SixLabors.ImageSharp",
       "targetGraphs": [
-        ".NETStandard,Version=v2.0",
-        ".NETStandard,Version=v2.0/win-x64"
+        ".NETStandard,Version=v2.0"
       ]
     },
     {
@@ -48,8 +46,7 @@
       "filePath": "C:\\Users\\iljab\\OneDrive\\Рабочий стол\\Практика\\DecoderApp\\Signatec\\ThoughtWorks.QRCode\\ThoughtWorks.QRCode.csproj",
       "libraryId": "SixLabors.ImageSharp",
       "targetGraphs": [
-        ".NETStandard,Version=v2.0",
-        ".NETStandard,Version=v2.0/win-x64"
+        ".NETStandard,Version=v2.0"
       ]
     },
     {
@@ -61,8 +58,7 @@
       "filePath": "C:\\Users\\iljab\\OneDrive\\Рабочий стол\\Практика\\DecoderApp\\Signatec\\ThoughtWorks.QRCode\\ThoughtWorks.QRCode.csproj",
       "libraryId": "SixLabors.ImageSharp",
       "targetGraphs": [
-        ".NETStandard,Version=v2.0",
-        ".NETStandard,Version=v2.0/win-x64"
+        ".NETStandard,Version=v2.0"
       ]
     },
     {
@@ -74,8 +70,7 @@
       "filePath": "C:\\Users\\iljab\\OneDrive\\Рабочий стол\\Практика\\DecoderApp\\Signatec\\ThoughtWorks.QRCode\\ThoughtWorks.QRCode.csproj",
       "libraryId": "SixLabors.ImageSharp",
       "targetGraphs": [
-        ".NETStandard,Version=v2.0",
-        ".NETStandard,Version=v2.0/win-x64"
+        ".NETStandard,Version=v2.0"
       ]
     },
     {
@@ -87,8 +82,7 @@
       "filePath": "C:\\Users\\iljab\\OneDrive\\Рабочий стол\\Практика\\DecoderApp\\Signatec\\ThoughtWorks.QRCode\\ThoughtWorks.QRCode.csproj",
       "libraryId": "SixLabors.ImageSharp",
       "targetGraphs": [
-        ".NETStandard,Version=v2.0",
-        ".NETStandard,Version=v2.0/win-x64"
+        ".NETStandard,Version=v2.0"
       ]
     }
   ]

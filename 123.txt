@@ -1,0 +1,17 @@
+﻿Формат: Higina
+Количество полей: 14
+
+#Id: 4235112522
+#Blank: BlankTobPki
+#Create: 19.05.2025
+#Department: Федеральная служба исполнения наказаний
+#BlankNumber: 1
+#OtpPost: Начальник
+#OtpRank: майору
+#OtpFio: Иванову И.И.
+#JobDate: 19.05.2025
+#JobCipher: 1
+#OtmType: ПКИ-Г
+#SanctionTerm: 180
+#identifierType_1: телефон
+#Identifier_1: 79990000000
