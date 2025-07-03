@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.IO;
 using System.IO.Ports;
@@ -59,9 +60,9 @@ namespace BarcodeDecoderApp
         static void SelectComPortMenu()
         {
             var ports = SerialPort.GetPortNames().OrderBy(p => p).ToList();
-            ports.Add("[[Отмена]]");
+            ports.Add("[[Выход]]");
 
-            if (ports.Count == 1) 
+            if (ports.Count == 1)
             {
                 AnsiConsole.MarkupLine("[red]COM-порты не найдены![/]");
                 AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
@@ -73,8 +74,8 @@ namespace BarcodeDecoderApp
                     .Title("Выберите COM порт сканера:")
                     .AddChoices(ports));
 
-            if (choice == "[[Отмена]]")
-                return;
+            if (choice == "[[Выход]]")
+                Environment.Exit(0);
 
             selectedPort = choice;
             RunScannerMode();
@@ -121,7 +122,7 @@ namespace BarcodeDecoderApp
                 if (serialPort == null)
                     return;
 
-                string data = serialPort.ReadLine(); 
+                string data = serialPort.ReadLine();
                 data = data.Trim();
 
                 if (string.IsNullOrEmpty(data))
@@ -133,12 +134,9 @@ namespace BarcodeDecoderApp
                     Console.WriteLine($"Получен штрихкод: {data}");
                     Console.ResetColor();
                 }
-
-              
             }
             catch (TimeoutException)
             {
-                
             }
             catch (Exception ex)
             {
@@ -153,11 +151,11 @@ namespace BarcodeDecoderApp
 
         static void LoadDumpMenu()
         {
-            var pathRaw = AnsiConsole.Ask<string>("Укажите путь к файлу дампа (.dat) или введите [[Отмена]]:");
+            var pathRaw = AnsiConsole.Ask<string>("Укажите путь к файлу дампа (.dat) или введите [[Выход]]:");
             var path = CleanInput(pathRaw);
 
-            if (path.Equals("[[Отмена]]", StringComparison.OrdinalIgnoreCase))
-                return;
+            if (path.Equals("[[Выход]]", StringComparison.OrdinalIgnoreCase))
+                Environment.Exit(0);
 
             if (!File.Exists(path))
             {
@@ -182,15 +180,21 @@ namespace BarcodeDecoderApp
                 if (res == null)
                     res = TaskCompressor.DeCompress(inputBuffer);
 
+                if (res == null)
+                {
+                    AnsiConsole.MarkupLine("[red]Штрихкод не распознан[/]");
+                    return null;
+                }
+
                 return res;
             }
             catch (Exception ex)
             {
                 AnsiConsole.MarkupLine($"[red]Ошибка при декодировании: {ex.Message}[/]");
-                AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
                 return null;
             }
-        }
+}
+
 
         static void ShowBarcodeResultMenu()
         {
@@ -204,26 +208,41 @@ namespace BarcodeDecoderApp
                 }
                 else
                 {
-                    AnsiConsole.MarkupLine("[green]Штрихкод распознан[/]");
-                    AnsiConsole.MarkupLine($"Формат: {lastBarcodeResult.SourceType}");
-                    AnsiConsole.MarkupLine($"Количество полей: {lastBarcodeResult.Fields?.Length ?? 0}");
-
-                    var table = new Table();
-                    table.AddColumn("Ключ");
-                    table.AddColumn("Значение");
-
-                    if (lastBarcodeResult.Fields != null)
+                    try
                     {
-                        foreach (var f in lastBarcodeResult.Fields)
-                        {
-                            table.AddRow(f.Name, f.Value);
-                        }
-                    }
+                        AnsiConsole.MarkupLine("[green]Штрихкод распознан[/]");
+                        AnsiConsole.MarkupLine($"Формат: {lastBarcodeResult.SourceType.ToString()}");
+                        AnsiConsole.MarkupLine($"Количество полей: {lastBarcodeResult.Fields?.Length ?? 0}");
 
-                    AnsiConsole.Write(table);
+                        var table = new Table();
+                        table.AddColumn("Ключ");
+                        table.AddColumn("Значение");
+
+                        if (lastBarcodeResult.Fields != null)
+                        {
+                            foreach (var f in lastBarcodeResult.Fields)
+                            {
+                                var key = f.Name.Replace("[", "\\[").Replace("]", "\\]");
+                                var val = f.Value.Replace("[", "\\[").Replace("]", "\\]");
+                                table.AddRow(key, val);
+                            }
+                        }
+
+                        AnsiConsole.Write(table);
+                    }
+                    catch (Exception ex)
+                    {
+                        AnsiConsole.Clear();  // Чтобы не показывать "Штрихкод распознан"
+                        AnsiConsole.MarkupLine("[red]Штрихкод не распознан[/]");
+                        AnsiConsole.MarkupLine($"[red]Ошибка при отображении результата: {ex.Message}[/]");
+                        AnsiConsole.MarkupLine($"[red]Предполагаемое количество полей: {lastBarcodeResult.Fields?.Length ?? 0}[/]");
+                    }
                 }
 
-                var choices = new List<string> { "Повторить", "Отмена" };
+                // Добавляем пункт "Сохранить" только если штрихкод распознан успешно
+                var choices = lastBarcodeResult == null
+                    ? new List<string> { "Повторить", "Выход" }
+                    : new List<string> { "Повторить", "Сохранить", "Выход" };
 
                 var action = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
@@ -233,12 +252,53 @@ namespace BarcodeDecoderApp
                 switch (action)
                 {
                     case "Повторить":
-                        return; 
-                    case "Отмена":
-                        lastBarcodeResult = null;
                         return;
+                    case "Сохранить":
+                        SaveBarcodeToFile(lastBarcodeResult);
+                        break;
+                    case "Выход":
+                        Environment.Exit(0);
+                        break;
                 }
             }
+        }
+
+        static void SaveBarcodeToFile(Barcode barcode)
+        {
+            var path = AnsiConsole.Ask<string>("Введите путь для сохранения файла (.txt):");
+
+            try
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"Формат: {barcode.SourceType}");
+                sb.AppendLine($"Количество полей: {barcode.Fields?.Length ?? 0}");
+                sb.AppendLine();
+
+                if (barcode.Fields != null)
+                {
+                    foreach (var f in barcode.Fields)
+                    {
+                        sb.AppendLine($"{f.Name}: {f.Value}");
+                    }
+                }
+
+                File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
+                AnsiConsole.MarkupLine("[green]Файл успешно сохранён.[/]");
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine($"[red]Ошибка при сохранении файла: {ex.Message}[/]");
+            }
+
+            AnsiConsole.Prompt(new TextPrompt<string>("Нажмите Enter чтобы продолжить...").AllowEmpty());
+        }
+
+
+
+
+        static string EscapeMarkup(string text)
+        {
+            return text.Replace("[", "[[").Replace("]", "]]");
         }
     }
 }
